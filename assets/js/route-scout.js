@@ -102,6 +102,41 @@
 	}
 
 	/**
+	 * Render path dropdown.
+	 *
+	 * @param {Array} routes Routes to display.
+	 */
+	function renderPathDropdown( routes ) {
+		const dropdown = document.getElementById( 'path-dropdown' );
+		dropdown.innerHTML = '';
+
+		if ( ! routes.length ) {
+			dropdown.innerHTML = '<div class="route-scout-dropdown-item">No routes found</div>';
+			return;
+		}
+
+		routes.forEach( ( route ) => {
+			const item = document.createElement( 'div' );
+			item.className = 'route-scout-dropdown-item';
+
+			const methods = route.methods.map( ( m ) => {
+				const color = getMethodColor( m );
+				return `<span class="route-scout-dropdown-item-method" style="background-color: ${color}">${m}</span>`;
+			} ).join( '' );
+
+			item.innerHTML = `${methods} <span class="route-scout-dropdown-item-path">${escapeHtml( route.route )}</span>`;
+			item.onclick = () => {
+				document.getElementById( 'request-path' ).value = route.route;
+				state.path = route.route;
+				document.getElementById( 'path-dropdown' ).classList.remove( 'active' );
+				selectRoute( route );
+			};
+
+			dropdown.appendChild( item );
+		} );
+	}
+
+	/**
 	 * Render param input fields.
 	 *
 	 * @param {Array} args Route args.
@@ -307,8 +342,37 @@
 			state.method = e.target.value;
 		} );
 
-		// Path input.
-		document.getElementById( 'request-path' ).addEventListener( 'change', ( e ) => {
+		// Path input with dropdown.
+		const pathInput = document.getElementById( 'request-path' );
+		const pathDropdown = document.getElementById( 'path-dropdown' );
+
+		pathInput.addEventListener( 'focus', () => {
+			renderPathDropdown( state.routes );
+			pathDropdown.classList.add( 'active' );
+		} );
+
+		pathInput.addEventListener( 'blur', () => {
+			setTimeout( () => {
+				pathDropdown.classList.remove( 'active' );
+			}, 200 );
+		} );
+
+		pathInput.addEventListener( 'input', ( e ) => {
+			state.path = e.target.value;
+			const query = e.target.value.toLowerCase();
+			const filtered = state.routes.filter( ( route ) => route.route.toLowerCase().includes( query ) );
+			if ( query.length > 0 && filtered.length > 0 ) {
+				renderPathDropdown( filtered );
+				pathDropdown.classList.add( 'active' );
+			} else if ( query.length === 0 ) {
+				renderPathDropdown( state.routes );
+				pathDropdown.classList.add( 'active' );
+			} else {
+				pathDropdown.classList.remove( 'active' );
+			}
+		} );
+
+		pathInput.addEventListener( 'change', ( e ) => {
 			state.path = e.target.value;
 		} );
 

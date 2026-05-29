@@ -136,6 +136,10 @@
 	cursor: pointer;
 }
 
+.route-scout-path-wrapper {
+	position: relative;
+}
+
 .route-scout-path {
 	padding: 8px 12px;
 	border: 1px solid #ddd;
@@ -143,6 +147,66 @@
 	font-size: 12px;
 	font-family: monospace;
 	width: 100%;
+	box-sizing: border-box;
+}
+
+.route-scout-path-dropdown {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	background: #fff;
+	border: 1px solid #ddd;
+	border-top: none;
+	border-radius: 0 0 4px 4px;
+	max-height: 250px;
+	overflow-y: auto;
+	z-index: 1000;
+	display: none;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.route-scout-path-dropdown.active {
+	display: block;
+}
+
+.route-scout-dropdown-item {
+	padding: 8px 12px;
+	cursor: pointer;
+	border-bottom: 1px solid #f0f0f0;
+	font-size: 12px;
+	font-family: monospace;
+	transition: background-color 0.15s;
+}
+
+.route-scout-dropdown-item:last-child {
+	border-bottom: none;
+}
+
+.route-scout-dropdown-item:hover {
+	background-color: #f5f5f5;
+}
+
+.route-scout-dropdown-item.active {
+	background-color: #0073aa;
+	color: #fff;
+}
+
+.route-scout-dropdown-item-method {
+	display: inline-block;
+	font-size: 10px;
+	font-weight: 600;
+	margin-right: 8px;
+	padding: 2px 6px;
+	border-radius: 3px;
+	color: #fff;
+	min-width: 35px;
+	text-align: center;
+}
+
+.route-scout-dropdown-item-path {
+	display: inline-block;
+	color: inherit;
 }
 
 .route-scout-tabs {

@@ -105,12 +105,16 @@ class Admin {
 							<option value="DELETE">DELETE</option>
 							<option value="PATCH">PATCH</option>
 						</select>
-						<input
-							type="text"
-							id="request-path"
-							class="route-scout-path"
-							placeholder="<?php esc_attr_e( '/wp/v2/posts', 'route-scout' ); ?>"
-						>
+						<div class="route-scout-path-wrapper">
+							<input
+								type="text"
+								id="request-path"
+								class="route-scout-path"
+								placeholder="<?php esc_attr_e( '/wp/v2/posts', 'route-scout' ); ?>"
+								autocomplete="off"
+							>
+							<div id="path-dropdown" class="route-scout-path-dropdown"></div>
+						</div>
 					</div>
 
 					<div class="route-scout-tabs">
