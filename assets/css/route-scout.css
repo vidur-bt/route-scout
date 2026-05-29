@@ -71,8 +71,24 @@
 	margin-bottom: 20px;
 }
 
+.route-scout-group-title-wrapper {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	cursor: pointer;
+	padding: 8px;
+	margin: -8px 0 10px -8px;
+	border-radius: 3px;
+	transition: background-color 0.2s;
+}
+
+.route-scout-group-title-wrapper:hover {
+	background-color: #f0f0f0;
+}
+
 .route-scout-group-title {
-	margin: 0 0 10px;
+	margin: 0;
 	font-size: 13px;
 	font-weight: 600;
 	color: #666;
@@ -80,6 +96,23 @@
 	letter-spacing: 0.5px;
 	border-left: 3px solid #0073aa;
 	padding-left: 8px;
+	flex: 1;
+}
+
+.route-scout-group-icon {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	color: #666;
+	font-size: 16px;
+	line-height: 20px;
+	text-align: center;
+	transition: transform 0.2s;
+	flex-shrink: 0;
+}
+
+.route-scout-group-icon.collapsed {
+	transform: rotate(-90deg);
 }
 
 .route-scout-item {

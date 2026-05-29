@@ -14,6 +14,7 @@
 		body: '',
 		response: null,
 		savedRequests: [],
+		collapsedGroups: {},
 	};
 
 	/**
@@ -62,25 +63,47 @@
 			const group = document.createElement( 'div' );
 			group.className = 'route-scout-group';
 
+			const titleWrapper = document.createElement( 'div' );
+			titleWrapper.className = 'route-scout-group-title-wrapper';
+
 			const title = document.createElement( 'h3' );
 			title.className = 'route-scout-group-title';
 			title.textContent = namespace;
-			group.appendChild( title );
 
-			grouped[ namespace ].forEach( ( route ) => {
-				const item = document.createElement( 'div' );
-				item.className = 'route-scout-item';
+			const icon = document.createElement( 'span' );
+			icon.className = 'route-scout-group-icon dashicons dashicons-arrow-down';
 
-				const methodBadges = route.methods.map( ( m ) => {
-					const color = getMethodColor( m );
-					return `<span class="route-scout-method-badge" style="background-color: ${color}">${m}</span>`;
-				} ).join( '' );
+			const isCollapsed = state.collapsedGroups[ namespace ];
+			if ( isCollapsed ) {
+				group.classList.add( 'collapsed' );
+				icon.classList.add( 'collapsed' );
+			}
 
-				item.innerHTML = `${methodBadges} <span class="route-scout-path-text">${escapeHtml( route.route )}</span>`;
-				item.onclick = () => selectRoute( route );
+			titleWrapper.appendChild( title );
+			titleWrapper.appendChild( icon );
+			titleWrapper.onclick = () => {
+				state.collapsedGroups[ namespace ] = ! state.collapsedGroups[ namespace ];
+				renderRouteList( routes );
+			};
 
-				group.appendChild( item );
-			} );
+			group.appendChild( titleWrapper );
+
+			if ( ! isCollapsed ) {
+				grouped[ namespace ].forEach( ( route ) => {
+					const item = document.createElement( 'div' );
+					item.className = 'route-scout-item';
+
+					const methodBadges = route.methods.map( ( m ) => {
+						const color = getMethodColor( m );
+						return `<span class="route-scout-method-badge" style="background-color: ${color}">${m}</span>`;
+					} ).join( '' );
+
+					item.innerHTML = `${methodBadges} <span class="route-scout-path-text">${escapeHtml( route.route )}</span>`;
+					item.onclick = () => selectRoute( route );
+
+					group.appendChild( item );
+				} );
+			}
 
 			container.appendChild( group );
 		} );
