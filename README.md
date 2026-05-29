@@ -138,6 +138,10 @@ The **left panel** shows every REST API endpoint registered on your WordPress in
 
 Use the search box at the top of the left panel to filter routes by name. For example, typing `posts` will show all routes that include "posts" in the path.
 
+**Collapsing/Expanding Groups:**
+
+Each namespace group (e.g., `OEMBED/1.0`, `WP/V2`, `ROUTE-SCOUT/V1`) has a **chevron icon** on the right side of the group title. Click the group title or the chevron to collapse or expand that section. This is useful when you have many endpoints and want to focus on a specific namespace.
+
 **Selecting a route:**
 
 Click any route to load it into the center panel. The method and path will be pre-filled automatically.
@@ -337,6 +341,7 @@ In your browser's `localStorage`. This means:
 - Groups routes by namespace so you can easily find what you are looking for
 - Color-coded HTTP method badges (GET, POST, PUT, DELETE, PATCH)
 - Live search filters routes as you type
+- **Accordion collapse/expand** — Click the chevron icon on any group title to collapse or expand that namespace section
 - Click any route to instantly populate the request builder
 
 ### Endpoint Dropdown Selector
