@@ -7,6 +7,10 @@
 
 namespace RouteScout;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Registers admin page and enqueues assets.
  */

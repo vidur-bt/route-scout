@@ -7,6 +7,10 @@
 
 namespace RouteScout;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Proxies REST API requests for testing.
  */

@@ -23,6 +23,8 @@ Route Scout lets you browse every REST API endpoint registered on your WordPress
    - [Opening the Tool](#opening-the-tool)
    - [Browsing Endpoints](#browsing-endpoints)
    - [Sending a Request](#sending-a-request)
+   - [URL Parameters (Post ID, User ID, etc.)](#url-parameters-post-id-user-id-etc)
+   - [Endpoint Dropdown Selector](#endpoint-dropdown-selector)
    - [Reading the Response](#reading-the-response)
    - [Saving Requests](#saving-requests)
 5. [Features in Detail](#features-in-detail)
@@ -167,10 +169,21 @@ The path field shows the endpoint URL. It is pre-filled when you click a route i
 
 **Step 3 — Add parameters (Params tab)**
 
-When you click a route, its available parameters appear as input fields automatically. Fill in the values you want to send. For example:
+When you click a route, its available parameters appear as input fields automatically. Parameters are organized into two sections:
 
-- For `GET /wp/v2/posts`: you might set `per_page` = `5` to fetch 5 posts
-- For `POST /wp/v2/posts`: you would set `title` = `My New Post` and `status` = `draft`
+**URL Parameters (Required)**
+- These are parameters extracted from the route pattern (e.g., `id` from `/wp/v2/posts/(?P<id>[\d]+)`)
+- Highlighted with a red border to indicate they are required
+- For example:
+  - Testing `/wp/v2/posts/42` requires entering `42` in the `id` field
+  - Testing `/wp/v2/users/5` requires entering `5` in the `id` field
+
+**Query/Body Parameters (Optional)**
+- These are additional filters or options for the endpoint
+- Standard styling (no red highlight)
+- For example:
+  - For `GET /wp/v2/posts`: you might set `per_page` = `5` to fetch 5 posts
+  - For `POST /wp/v2/posts`: you would set `title` = `My New Post` and `status` = `draft`
 
 **Step 4 — Add a body (Body tab)**
 
@@ -187,6 +200,61 @@ For `POST`, `PUT`, and `PATCH` requests, you can also provide a raw JSON body. C
 **Step 5 — Send**
 
 Click the **Send Request** button. Route Scout handles authentication automatically — no need to add nonces or cookies manually.
+
+---
+
+### URL Parameters (Post ID, User ID, etc.)
+
+When testing routes that require a specific resource (like a post or user), Route Scout automatically extracts and highlights the required parameters.
+
+**Example: Testing a specific post**
+
+Route: `/wp/v2/posts/(?P<id>[\d]+)`
+
+When selected, the Params tab shows:
+
+```
+URL Parameters (Required)    ← Section header
+├─ id: [________________]    ← Red border, required input
+                            Enter the post ID (e.g., 42)
+```
+
+Fill in `42` and click Send Request to test `/wp/v2/posts/42`.
+
+**Example: Testing a specific user**
+
+Route: `/wp/v2/users/(?P<id>[\d]+)`
+
+```
+URL Parameters (Required)
+├─ id: [________________]    ← Enter the user ID
+```
+
+**Why this matters:**
+
+- **Post ID** — Test retrieving, updating, or deleting a specific post
+- **User ID** — Test user endpoints with a specific account
+- **Custom IDs** — Any parameterized route extracts the parameter automatically
+
+---
+
+### Endpoint Dropdown Selector
+
+In addition to the left panel, you can also select endpoints via a **dropdown in the path field**.
+
+**How to use it:**
+
+1. Click or focus the **path field** in the center panel
+2. A dropdown appears showing all available routes
+3. Type to filter the list (search works just like the left panel)
+4. Click any route to select it
+
+**Benefits:**
+
+- Faster than using the left panel for quick selections
+- Supports keyboard navigation (focus → type → arrow down → enter)
+- Shows method badges inline (GET, POST, DELETE, etc.)
+- Closes automatically when you select an endpoint
 
 ---
 
@@ -271,19 +339,38 @@ In your browser's `localStorage`. This means:
 - Live search filters routes as you type
 - Click any route to instantly populate the request builder
 
+### Endpoint Dropdown Selector
+
+- **Quick access dropdown** in the path field — click to see all routes
+- Type to filter routes in real time
+- Shows method badges directly in the dropdown
+- Faster alternative to the left panel for frequent users
+- Keyboard-friendly (tab → type → arrow keys → enter)
+
 ### Request Builder
 
 - Supports all five HTTP methods: `GET`, `POST`, `PUT`, `DELETE`, `PATCH`
 - Path field is editable — you can manually type a route or modify the one from the browser
+- **Path dropdown**: Click or focus the path field to see all routes with filtering
 - **Params tab**: Parameter names are auto-detected from the selected route; just fill in the values
+  - **URL Parameters** (required): Automatically extracted from route patterns — highlighted in red to indicate they're required (e.g., post ID, user ID)
+  - **Query/Body Parameters** (optional): Additional filters or options for the endpoint
 - **Body tab**: For write operations, paste raw JSON directly
 - One-click **Send Request** with automatic authentication
+
+### URL Parameter Auto-Extraction
+
+- Route Scout automatically parses route patterns like `/wp/v2/posts/(?P<id>[\d]+)` and extracts the parameter name (`id`)
+- Required URL parameters are displayed in a separate section with red styling
+- Perfect for testing specific resources (posts, users, custom items)
+- No manual entry of parameter names — it's all automatic
 
 ### Response Inspector
 
 - Shows HTTP status code and response time in milliseconds
 - **Formatted view**: Pretty-printed JSON with indentation for easy reading
 - **Raw view**: Single-line JSON for copying or exact inspection
+- Inline error display (no blocking alerts)
 - Handles all response types — arrays, objects, empty responses, and error messages
 
 ### Request Collections
@@ -296,6 +383,7 @@ In your browser's `localStorage`. This means:
 ### Search & Filter
 
 - Search box filters the endpoint list in real time
+- Path dropdown filters as you type
 - Works across namespaces, methods, and path names
 - Useful when a site has dozens or hundreds of registered routes
 

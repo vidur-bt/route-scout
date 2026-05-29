@@ -7,6 +7,10 @@
 
 namespace RouteScout;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Discovers registered REST API routes.
  */
