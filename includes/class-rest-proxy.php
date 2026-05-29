@@ -75,28 +75,17 @@ class Rest_Proxy {
 		$params = $request->get_param( 'params' ) ?? array();
 		$body   = $request->get_param( 'body' ) ?? '';
 
-		// Validate path is a registered route.
-		if ( ! $this->is_registered_route( $path ) ) {
-			return new \WP_Error(
-				'invalid_path',
-				'Route not found',
-				array( 'status' => 404 )
-			);
-		}
-
 		$start_time = microtime( true );
 
 		// Create internal request.
 		$internal_request = new \WP_REST_Request( $method, $path );
 
-		// Add params.
-		if ( is_array( $params ) ) {
-			foreach ( $params as $key => $value ) {
-				if ( 'GET' === $method ) {
-					$internal_request->set_query_params( array( $key => $value ) );
-				} else {
-					$internal_request->set_body_params( array( $key => $value ) );
-				}
+		// Add params — set all at once to avoid overwriting on each iteration.
+		if ( is_array( $params ) && ! empty( $params ) ) {
+			if ( 'GET' === $method ) {
+				$internal_request->set_query_params( $params );
+			} else {
+				$internal_request->set_body_params( $params );
 			}
 		}
 
@@ -134,15 +123,4 @@ class Rest_Proxy {
 		);
 	}
 
-	/**
-	 * Check if a route is registered.
-	 *
-	 * @param string $path The route path.
-	 * @return bool
-	 */
-	private function is_registered_route( string $path ): bool {
-		$server = rest_get_server();
-		$routes = $server->get_routes();
-		return isset( $routes[ $path ] );
-	}
 }

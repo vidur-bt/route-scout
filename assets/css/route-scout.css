@@ -318,6 +318,24 @@
 	border: 1px solid #444;
 }
 
+/* Error states */
+
+.route-scout-error {
+	display: inline-block;
+	background: #f93e3e;
+	color: #fff;
+	padding: 2px 8px;
+	border-radius: 3px;
+	font-weight: 600;
+	font-size: 12px;
+}
+
+.route-scout-error-text {
+	color: #f93e3e;
+	font-size: 12px;
+	padding: 10px 0;
+}
+
 /* Responsive */
 
 @media (max-width: 1400px) {

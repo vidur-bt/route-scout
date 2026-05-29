@@ -31,7 +31,7 @@
 	async function loadRoutes() {
 		try {
 			const response = await wp.apiFetch( {
-				path: routeScout.restUrl + 'routes',
+				path: '/route-scout/v1/routes',
 			} );
 
 			state.routes = response || [];
@@ -154,7 +154,7 @@
 
 		try {
 			const response = await wp.apiFetch( {
-				path: routeScout.restUrl + 'proxy',
+				path: '/route-scout/v1/proxy',
 				method: 'POST',
 				data: {
 					method: method,
@@ -167,7 +167,7 @@
 			state.response = response;
 			renderResponse( response );
 		} catch ( error ) {
-			showError( `Request failed: ${error.message}` );
+			renderError( error.message );
 		}
 	}
 
@@ -397,12 +397,26 @@
 	}
 
 	/**
-	 * Show error message.
+	 * Render an error into the response panel.
+	 *
+	 * @param {string} message Error message.
+	 */
+	function renderError( message ) {
+		const statusEl = document.getElementById( 'response-info' );
+		statusEl.innerHTML = `<span class="route-scout-error">Error</span>`;
+
+		document.getElementById( 'response-formatted' ).textContent = message;
+		document.getElementById( 'response-raw' ).textContent = message;
+	}
+
+	/**
+	 * Show error message (used for non-request errors only).
 	 *
 	 * @param {string} message Error message.
 	 */
 	function showError( message ) {
-		alert( message ); // eslint-disable-line no-alert
+		const container = document.getElementById( 'route-list' );
+		container.innerHTML = `<p class="route-scout-error-text">${message}</p>`;
 	}
 
 	// Initialize on load.
