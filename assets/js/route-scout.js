@@ -423,14 +423,16 @@
 
 		if ( pathInput && pathDropdown ) {
 			pathInput.addEventListener( 'focus', () => {
-				renderPathDropdown( state.routes );
-				pathDropdown.classList.add( 'active' );
+				if ( state.routes.length > 0 ) {
+					renderPathDropdown( state.routes );
+					pathDropdown.classList.add( 'active' );
+				}
 			} );
 
 			pathInput.addEventListener( 'blur', () => {
 				setTimeout( () => {
 					pathDropdown.classList.remove( 'active' );
-				}, 200 );
+				}, 150 );
 			} );
 
 			pathInput.addEventListener( 'input', ( e ) => {
@@ -440,7 +442,7 @@
 				if ( query.length > 0 && filtered.length > 0 ) {
 					renderPathDropdown( filtered );
 					pathDropdown.classList.add( 'active' );
-				} else if ( query.length === 0 ) {
+				} else if ( query.length === 0 && state.routes.length > 0 ) {
 					renderPathDropdown( state.routes );
 					pathDropdown.classList.add( 'active' );
 				} else {
