@@ -400,50 +400,58 @@
 	 */
 	function attachEventListeners() {
 		// Search routes.
-		document.getElementById( 'route-search' ).addEventListener( 'keyup', ( e ) => {
-			const query = e.target.value.toLowerCase();
-			const filtered = state.routes.filter( ( route ) => route.route.toLowerCase().includes( query ) );
-			renderRouteList( filtered );
-		} );
+		const searchInput = document.getElementById( 'route-search' );
+		if ( searchInput ) {
+			searchInput.addEventListener( 'keyup', ( e ) => {
+				const query = e.target.value.toLowerCase();
+				const filtered = state.routes.filter( ( route ) => route.route.toLowerCase().includes( query ) );
+				renderRouteList( filtered );
+			} );
+		}
 
 		// Method selector.
-		document.getElementById( 'request-method' ).addEventListener( 'change', ( e ) => {
-			state.method = e.target.value;
-		} );
+		const methodSelect = document.getElementById( 'request-method' );
+		if ( methodSelect ) {
+			methodSelect.addEventListener( 'change', ( e ) => {
+				state.method = e.target.value;
+			} );
+		}
 
 		// Path input with dropdown.
 		const pathInput = document.getElementById( 'request-path' );
 		const pathDropdown = document.getElementById( 'path-dropdown' );
 
-		pathInput.addEventListener( 'focus', () => {
-			renderPathDropdown( state.routes );
-			pathDropdown.classList.add( 'active' );
-		} );
-
-		pathInput.addEventListener( 'blur', () => {
-			setTimeout( () => {
-				pathDropdown.classList.remove( 'active' );
-			}, 200 );
-		} );
-
-		pathInput.addEventListener( 'input', ( e ) => {
-			state.path = e.target.value;
-			const query = e.target.value.toLowerCase();
-			const filtered = state.routes.filter( ( route ) => route.route.toLowerCase().includes( query ) );
-			if ( query.length > 0 && filtered.length > 0 ) {
-				renderPathDropdown( filtered );
-				pathDropdown.classList.add( 'active' );
-			} else if ( query.length === 0 ) {
+		if ( pathInput && pathDropdown ) {
+			pathInput.addEventListener( 'focus', () => {
 				renderPathDropdown( state.routes );
 				pathDropdown.classList.add( 'active' );
-			} else {
-				pathDropdown.classList.remove( 'active' );
-			}
-		} );
+			} );
 
-		pathInput.addEventListener( 'change', ( e ) => {
-			state.path = e.target.value;
-		} );
+			pathInput.addEventListener( 'blur', () => {
+				setTimeout( () => {
+					pathDropdown.classList.remove( 'active' );
+				}, 200 );
+			} );
+
+			pathInput.addEventListener( 'input', ( e ) => {
+				state.path = e.target.value;
+				const query = e.target.value.toLowerCase();
+				const filtered = state.routes.filter( ( route ) => route.route.toLowerCase().includes( query ) );
+				if ( query.length > 0 && filtered.length > 0 ) {
+					renderPathDropdown( filtered );
+					pathDropdown.classList.add( 'active' );
+				} else if ( query.length === 0 ) {
+					renderPathDropdown( state.routes );
+					pathDropdown.classList.add( 'active' );
+				} else {
+					pathDropdown.classList.remove( 'active' );
+				}
+			} );
+
+			pathInput.addEventListener( 'change', ( e ) => {
+				state.path = e.target.value;
+			} );
+		}
 
 		// Send request.
 		document.getElementById( 'send-request-btn' ).addEventListener( 'click', sendRequest );

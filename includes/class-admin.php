@@ -63,6 +63,8 @@ class Admin {
 			ROUTE_SCOUT_VERSION
 		);
 
+		wp_enqueue_style( 'dashicons' );
+
 		wp_localize_script(
 			'route-scout-app',
 			'routeScout',
@@ -117,6 +119,7 @@ class Admin {
 								placeholder="<?php esc_attr_e( '/wp/v2/posts', 'route-scout' ); ?>"
 								autocomplete="off"
 							>
+							<span class="route-scout-path-icon dashicons dashicons-arrow-down"></span>
 							<div id="path-dropdown" class="route-scout-path-dropdown"></div>
 						</div>
 					</div>
