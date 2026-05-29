@@ -98,7 +98,27 @@
 		state.path = route.route;
 		state.method = route.methods[ 0 ] || 'GET';
 
-		renderParamInputs( route.args || [] );
+		// Extract URL parameters from route pattern (e.g., (?P<id>...) -> id).
+		const routeParams = extractRouteParams( route.route );
+		renderParamInputs( routeParams, route.args || [] );
+	}
+
+	/**
+	 * Extract parameter names from route pattern.
+	 *
+	 * @param {string} route Route pattern (e.g., /wp/v2/posts/(?P<id>[\d]+)).
+	 * @return {Array} Parameter names (e.g., ['id']).
+	 */
+	function extractRouteParams( route ) {
+		const regex = /\(\?P<(\w+)>[^)]+\)/g;
+		const params = [];
+		let match;
+
+		while ( ( match = regex.exec( route ) ) !== null ) {
+			params.push( match[ 1 ] );
+		}
+
+		return params;
 	}
 
 	/**
@@ -139,35 +159,84 @@
 	/**
 	 * Render param input fields.
 	 *
-	 * @param {Array} args Route args.
+	 * @param {Array} routeParams Route URL parameters (from pattern, e.g., ['id']).
+	 * @param {Array} args Query/body parameters.
 	 */
-	function renderParamInputs( args ) {
+	function renderParamInputs( routeParams, args ) {
 		const container = document.getElementById( 'params-list' );
 		container.innerHTML = '';
 
-		if ( ! args.length ) {
+		const allParams = [ ...routeParams, ...args ];
+
+		if ( ! allParams.length ) {
 			container.innerHTML = '<p>No parameters</p>';
 			return;
 		}
 
-		args.forEach( ( arg ) => {
-			const wrapper = document.createElement( 'div' );
-			wrapper.className = 'route-scout-param-input';
+		// Render route/URL parameters first (with emphasis).
+		if ( routeParams.length > 0 ) {
+			const routeSection = document.createElement( 'div' );
+			routeSection.className = 'route-scout-param-section';
 
-			const label = document.createElement( 'label' );
-			label.textContent = arg;
+			const routeTitle = document.createElement( 'div' );
+			routeTitle.className = 'route-scout-param-section-title';
+			routeTitle.textContent = 'URL Parameters (Required)';
+			routeSection.appendChild( routeTitle );
 
-			const input = document.createElement( 'input' );
-			input.type = 'text';
-			input.placeholder = `Value for ${arg}`;
-			input.onchange = ( e ) => {
-				state.params[ arg ] = e.target.value;
-			};
+			routeParams.forEach( ( param ) => {
+				const wrapper = document.createElement( 'div' );
+				wrapper.className = 'route-scout-param-input route-scout-param-required';
 
-			wrapper.appendChild( label );
-			wrapper.appendChild( input );
-			container.appendChild( wrapper );
-		} );
+				const label = document.createElement( 'label' );
+				label.textContent = param;
+
+				const input = document.createElement( 'input' );
+				input.type = 'text';
+				input.placeholder = `Enter ${param} (required)`;
+				input.style.borderColor = '#f93e3e';
+				input.onchange = ( e ) => {
+					state.params[ param ] = e.target.value;
+				};
+
+				wrapper.appendChild( label );
+				wrapper.appendChild( input );
+				routeSection.appendChild( wrapper );
+			} );
+
+			container.appendChild( routeSection );
+		}
+
+		// Render query/body parameters.
+		if ( args.length > 0 ) {
+			const querySection = document.createElement( 'div' );
+			querySection.className = 'route-scout-param-section';
+
+			const queryTitle = document.createElement( 'div' );
+			queryTitle.className = 'route-scout-param-section-title';
+			queryTitle.textContent = 'Query/Body Parameters (Optional)';
+			querySection.appendChild( queryTitle );
+
+			args.forEach( ( arg ) => {
+				const wrapper = document.createElement( 'div' );
+				wrapper.className = 'route-scout-param-input';
+
+				const label = document.createElement( 'label' );
+				label.textContent = arg;
+
+				const input = document.createElement( 'input' );
+				input.type = 'text';
+				input.placeholder = `Value for ${arg}`;
+				input.onchange = ( e ) => {
+					state.params[ arg ] = e.target.value;
+				};
+
+				wrapper.appendChild( label );
+				wrapper.appendChild( input );
+				querySection.appendChild( wrapper );
+			} );
+
+			container.appendChild( querySection );
+		}
 	}
 
 	/**

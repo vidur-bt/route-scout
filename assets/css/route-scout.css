@@ -249,6 +249,21 @@
 	margin-bottom: 15px;
 }
 
+.route-scout-param-section {
+	margin-bottom: 20px;
+}
+
+.route-scout-param-section-title {
+	font-size: 11px;
+	font-weight: 700;
+	color: #666;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	margin-bottom: 10px;
+	padding-bottom: 8px;
+	border-bottom: 1px solid #e0e0e0;
+}
+
 .route-scout-param-input {
 	margin-bottom: 10px;
 }
@@ -268,6 +283,18 @@
 	border: 1px solid #ddd;
 	border-radius: 3px;
 	font-size: 12px;
+	box-sizing: border-box;
+}
+
+.route-scout-param-required input {
+	background-color: #fff9f9;
+	border-color: #f93e3e;
+}
+
+.route-scout-param-required input:focus {
+	outline: none;
+	border-color: #f93e3e;
+	box-shadow: 0 0 0 3px rgba(249, 62, 62, 0.1);
 }
 
 .route-scout-body-input {
